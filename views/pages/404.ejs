@@ -1,0 +1,326 @@
+<%- include('../layouts/main', { body: `
+<div class="error-page">
+    <div class="error-container">
+        <div class="error-content">
+            <div class="error-icon">
+                <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="m9 9 6 6"></path>
+                    <path d="m15 9-6 6"></path>
+                </svg>
+            </div>
+            
+            <div class="error-info">
+                <h1 class="error-title">404</h1>
+                <h2 class="error-subtitle">页面未找到</h2>
+                <p class="error-message">
+                    <%= message || '抱歉，您访问的页面不存在或已被移除。' %>
+                </p>
+                
+                <div class="error-actions">
+                    <a href="/" class="btn btn-primary">
+                        <i class="fas fa-home"></i>
+                        返回首页
+                    </a>
+                    <button onclick="history.back()" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        返回上页
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="error-suggestions">
+            <h3>您可以尝试：</h3>
+            <ul>
+                <li>检查网址是否正确</li>
+                <li><a href="/">访问首页</a>查看最新内容</li>
+                <li><a href="/posts">浏览所有文章</a></li>
+                <li>使用搜索功能查找内容</li>
+            </ul>
+        </div>
+        
+        <div class="search-section">
+            <h3>搜索内容</h3>
+            <form class="search-form" action="/search" method="get">
+                <div class="search-input-group">
+                    <input type="text" name="q" placeholder="搜索文章、分类或标签..." class="search-input">
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.error-page {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.error-container {
+    max-width: 600px;
+    text-align: center;
+    padding: 0 1rem;
+}
+
+.error-content {
+    margin-bottom: 3rem;
+}
+
+.error-icon {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    opacity: 0.6;
+}
+
+.error-title {
+    font-size: 6rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0;
+    line-height: 1;
+}
+
+.error-subtitle {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 1rem 0;
+}
+
+.error-message {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.error-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+}
+
+.error-suggestions {
+    text-align: left;
+    background: var(--bg-secondary);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 2rem;
+}
+
+.error-suggestions h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.error-suggestions ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.error-suggestions li {
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+}
+
+.error-suggestions a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.error-suggestions a:hover {
+    text-decoration: underline;
+}
+
+.search-section {
+    text-align: left;
+    background: var(--bg-secondary);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+}
+
+.search-section h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.search-form {
+    width: 100%;
+}
+
+.search-input-group {
+    display: flex;
+    gap: 0;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.search-input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    background: var(--bg-color);
+    color: var(--text-primary);
+}
+
+.search-btn {
+    padding: 0.75rem 1.5rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.search-btn:hover {
+    background: var(--primary-dark);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .error-title {
+        font-size: 4rem;
+    }
+    
+    .error-subtitle {
+        font-size: 1.5rem;
+    }
+    
+    .error-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .error-suggestions,
+    .search-section {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .error-title {
+        font-size: 3rem;
+    }
+    
+    .error-subtitle {
+        font-size: 1.25rem;
+    }
+    
+    .error-message {
+        font-size: 1rem;
+    }
+    
+    .error-suggestions,
+    .search-section {
+        padding: 1rem;
+    }
+}
+
+/* 暗色主题 */
+@media (prefers-color-scheme: dark) {
+    .error-icon {
+        opacity: 0.4;
+    }
+}
+
+/* 动画效果 */
+.error-content {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.error-suggestions,
+.search-section {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 焦点样式 */
+.search-input:focus {
+    box-shadow: inset 0 0 0 2px var(--primary-color);
+}
+
+.search-btn:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* 打印样式 */
+@media print {
+    .error-actions,
+    .search-section {
+        display: none;
+    }
+    
+    .error-page {
+        min-height: auto;
+    }
+}
+</style>
+
+<script>
+// 页面加载动画
+document.addEventListener('DOMContentLoaded', function() {
+    // 自动聚焦搜索框
+    const searchInput = document.querySelector('.search-input');
+    if (searchInput) {
+        setTimeout(() => {
+            searchInput.focus();
+        }, 500);
+    }
+    
+    // 搜索表单提交处理
+    const searchForm = document.querySelector('.search-form');
+    if (searchForm) {
+        searchForm.addEventListener('submit', function(e) {
+            const input = this.querySelector('.search-input');
+            if (!input.value.trim()) {
+                e.preventDefault();
+                input.focus();
+                return false;
+            }
+        });
+    }
+    
+    // 键盘快捷键
+    document.addEventListener('keydown', function(e) {
+        // 按 ESC 返回首页
+        if (e.key === 'Escape') {
+            window.location.href = '/';
+        }
+        
+        // 按 / 聚焦搜索框
+        if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+            e.preventDefault();
+            const searchInput = document.querySelector('.search-input');
+            if (searchInput) {
+                searchInput.focus();
+            }
+        }
+    });
+});
+</script>
+` }) %>

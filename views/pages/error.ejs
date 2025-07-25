@@ -1,0 +1,460 @@
+<%- include('../layouts/main', { body: `
+<div class="error-page">
+    <div class="error-container">
+        <div class="error-content">
+            <div class="error-icon">
+                <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+            </div>
+            
+            <div class="error-info">
+                <h1 class="error-title">500</h1>
+                <h2 class="error-subtitle">服务器错误</h2>
+                <p class="error-message">
+                    <%= message || '抱歉，服务器遇到了一些问题，请稍后重试。' %>
+                </p>
+                
+                <div class="error-actions">
+                    <a href="/" class="btn btn-primary">
+                        <i class="fas fa-home"></i>
+                        返回首页
+                    </a>
+                    <button onclick="location.reload()" class="btn btn-secondary">
+                        <i class="fas fa-redo"></i>
+                        重新加载
+                    </button>
+                    <button onclick="history.back()" class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i>
+                        返回上页
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="error-suggestions">
+            <h3>可能的解决方案：</h3>
+            <ul>
+                <li>刷新页面重试</li>
+                <li>检查网络连接</li>
+                <li>稍后再试</li>
+                <li>如果问题持续存在，请联系管理员</li>
+            </ul>
+        </div>
+        
+        <% if (typeof error !== 'undefined' && error && process.env.NODE_ENV === 'development') { %>
+        <div class="error-details">
+            <h3>错误详情（开发模式）：</h3>
+            <div class="error-stack">
+                <pre><code><%= error.stack %></code></pre>
+            </div>
+        </div>
+        <% } %>
+        
+        <div class="contact-section">
+            <h3>需要帮助？</h3>
+            <p>如果问题持续存在，您可以：</p>
+            <div class="contact-actions">
+                <% if (config.social && config.social.email) { %>
+                <a href="mailto:<%= config.social.email %>" class="contact-link">
+                    <i class="fas fa-envelope"></i>
+                    发送邮件
+                </a>
+                <% } %>
+                <% if (config.social && config.social.github) { %>
+                <a href="<%= config.social.github %>/issues" target="_blank" class="contact-link">
+                    <i class="fab fa-github"></i>
+                    报告问题
+                </a>
+                <% } %>
+                <a href="/" class="contact-link">
+                    <i class="fas fa-home"></i>
+                    访问首页
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.error-page {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.error-container {
+    max-width: 700px;
+    text-align: center;
+    padding: 0 1rem;
+}
+
+.error-content {
+    margin-bottom: 3rem;
+}
+
+.error-icon {
+    color: #ef4444;
+    margin-bottom: 2rem;
+    opacity: 0.8;
+}
+
+.error-title {
+    font-size: 6rem;
+    font-weight: 700;
+    color: #ef4444;
+    margin: 0;
+    line-height: 1;
+}
+
+.error-subtitle {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 1rem 0;
+}
+
+.error-message {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.error-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+}
+
+.error-suggestions {
+    text-align: left;
+    background: var(--bg-secondary);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 2rem;
+    border-left: 4px solid #f59e0b;
+}
+
+.error-suggestions h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.error-suggestions h3::before {
+    content: '💡';
+    font-size: 1.2em;
+}
+
+.error-suggestions ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.error-suggestions li {
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+}
+
+.error-details {
+    text-align: left;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 2rem;
+}
+
+.error-details h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #dc2626;
+}
+
+.error-stack {
+    background: #1f2937;
+    color: #f9fafb;
+    padding: 1rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.error-stack pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.contact-section {
+    text-align: left;
+    background: var(--bg-secondary);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--primary-color);
+}
+
+.contact-section h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.contact-section p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.contact-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--bg-color);
+    color: var(--text-primary);
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.contact-link:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .error-title {
+        font-size: 4rem;
+    }
+    
+    .error-subtitle {
+        font-size: 1.5rem;
+    }
+    
+    .error-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .error-suggestions,
+    .error-details,
+    .contact-section {
+        padding: 1.5rem;
+    }
+    
+    .contact-actions {
+        flex-direction: column;
+    }
+    
+    .contact-link {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .error-title {
+        font-size: 3rem;
+    }
+    
+    .error-subtitle {
+        font-size: 1.25rem;
+    }
+    
+    .error-message {
+        font-size: 1rem;
+    }
+    
+    .error-suggestions,
+    .error-details,
+    .contact-section {
+        padding: 1rem;
+    }
+    
+    .error-stack {
+        font-size: 0.75rem;
+        padding: 0.75rem;
+    }
+}
+
+/* 暗色主题 */
+@media (prefers-color-scheme: dark) {
+    .error-details {
+        background: #1f1f1f;
+        border-color: #ef4444;
+    }
+    
+    .error-details h3 {
+        color: #ef4444;
+    }
+    
+    .error-stack {
+        background: #0f0f0f;
+        color: #e5e5e5;
+    }
+}
+
+/* 动画效果 */
+.error-content {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.error-suggestions,
+.error-details,
+.contact-section {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 脉冲动画 */
+.error-icon svg {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}
+
+/* 焦点样式 */
+.contact-link:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* 打印样式 */
+@media print {
+    .error-actions,
+    .contact-section {
+        display: none;
+    }
+    
+    .error-page {
+        min-height: auto;
+    }
+    
+    .error-details {
+        background: white !important;
+        border: 1px solid #ccc !important;
+    }
+    
+    .error-stack {
+        background: #f5f5f5 !important;
+        color: #000 !important;
+    }
+}
+</style>
+
+<script>
+// 页面加载动画和交互
+document.addEventListener('DOMContentLoaded', function() {
+    // 自动重试机制（可选）
+    let retryCount = 0;
+    const maxRetries = 3;
+    
+    // 键盘快捷键
+    document.addEventListener('keydown', function(e) {
+        // 按 R 重新加载
+        if (e.key === 'r' || e.key === 'R') {
+            if (e.ctrlKey || e.metaKey) {
+                return; // 让浏览器处理 Ctrl+R
+            }
+            e.preventDefault();
+            location.reload();
+        }
+        
+        // 按 ESC 返回首页
+        if (e.key === 'Escape') {
+            window.location.href = '/';
+        }
+        
+        // 按 H 返回首页
+        if (e.key === 'h' || e.key === 'H') {
+            if (!e.ctrlKey && !e.metaKey) {
+                e.preventDefault();
+                window.location.href = '/';
+            }
+        }
+    });
+    
+    // 添加重试按钮功能
+    const retryBtn = document.querySelector('button[onclick="location.reload()"]');
+    if (retryBtn) {
+        retryBtn.addEventListener('click', function() {
+            retryCount++;
+            if (retryCount >= maxRetries) {
+                this.textContent = '重试次数过多';
+                this.disabled = true;
+                setTimeout(() => {
+                    this.textContent = '重新加载';
+                    this.disabled = false;
+                    retryCount = 0;
+                }, 5000);
+            }
+        });
+    }
+    
+    // 错误报告功能（如果有 GitHub 链接）
+    const githubLink = document.querySelector('a[href*="github"]');
+    if (githubLink && githubLink.href.includes('/issues')) {
+        githubLink.addEventListener('click', function(e) {
+            // 可以在这里添加自动填充错误信息的逻辑
+            const errorInfo = {
+                url: window.location.href,
+                userAgent: navigator.userAgent,
+                timestamp: new Date().toISOString()
+            };
+            
+            const issueBody = encodeURIComponent(
+                '## 错误报告\n\n' +
+                '**页面URL:** ' + errorInfo.url + '\n' +
+                '**时间:** ' + errorInfo.timestamp + '\n' +
+                '**浏览器:** ' + errorInfo.userAgent + '\n\n' +
+                '**错误描述:**\n请描述您遇到的问题...\n\n' +
+                '**重现步骤:**\n1. \n2. \n3. '
+            );
+            
+            this.href += '?body=' + issueBody;
+        });
+    }
+});
+</script>
+` }) %>

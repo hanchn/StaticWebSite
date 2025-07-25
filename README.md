@@ -1,6 +1,455 @@
-# 简约静态博客生成器
+# 静态网站生成器
 
-基于文件结构的轻量级静态博客生成器，类似 Hexo 的设计理念，专注于简单、直观的内容管理。
+一个现代化、高性能的静态网站生成器，专为开发者和内容创作者设计。
+
+## ✨ 特性
+
+### 🚀 核心功能
+- **零配置启动** - 开箱即用，无需复杂配置
+- **Markdown 支持** - 完整的 Markdown 语法支持，包括代码高亮
+- **响应式设计** - 自适应各种设备和屏幕尺寸
+- **SEO 优化** - 自动生成 meta 标签、sitemap 和 robots.txt
+- **高性能** - 生成的静态网站加载速度极快
+
+### 🔍 搜索功能
+- **全文搜索** - 支持标题、内容、标签的全文搜索
+- **实时搜索** - 输入即搜索，无需等待
+- **搜索建议** - 智能搜索建议和自动补全
+- **搜索高亮** - 搜索结果关键词高亮显示
+
+### 📡 API 支持
+- **静态 API** - 自动生成 JSON API 文件
+- **RESTful 风格** - 符合 REST 规范的 API 设计
+- **数据结构化** - 结构化的数据输出格式
+- **缓存优化** - 支持 HTTP 缓存策略
+
+### 📰 RSS 订阅
+- **多格式支持** - RSS、Atom、JSON Feed
+- **分类订阅** - 支持按分类和标签订阅
+- **自定义配置** - 灵活的 RSS 配置选项
+
+### 🎨 开发体验
+- **热重载** - 文件修改后自动刷新浏览器
+- **开发服务器** - 内置开发服务器，支持实时预览
+- **CLI 工具** - 强大的命令行工具
+- **插件系统** - 可扩展的插件架构
+
+## 🚀 快速开始
+
+### 安装
+
+```bash
+# 使用 npm
+npm install -g static-site-generator
+
+# 或使用 yarn
+yarn global add static-site-generator
+
+# 或使用 npx（无需全局安装）
+npx static-site-generator init my-website
+```
+
+### 创建项目
+
+```bash
+# 创建新项目
+static-site-generator init my-website
+cd my-website
+
+# 安装依赖
+npm install
+
+# 启动开发服务器
+npm run dev
+```
+
+### 项目结构
+
+```
+my-website/
+├── content/                 # 内容目录
+│   ├── posts/              # 博客文章
+│   │   ├── hello-world.md
+│   │   └── markdown-guide.md
+│   ├── pages/              # 静态页面
+│   │   └── about.md
+│   └── docs/               # 文档
+│       └── getting-started.md
+├── public/                 # 静态资源
+│   ├── css/               # 样式文件
+│   │   └── style.css
+│   ├── js/                # JavaScript 文件
+│   │   └── main.js
+│   └── images/            # 图片资源
+├── templates/              # 模板文件
+│   ├── layouts/           # 布局模板
+│   │   └── default.ejs
+│   ├── index.ejs          # 首页模板
+│   ├── post.ejs           # 文章模板
+│   └── posts.ejs          # 文章列表模板
+├── lib/                    # 核心库文件
+│   ├── builder.js         # 构建器
+│   ├── router.js          # 路由器
+│   ├── template.js        # 模板引擎
+│   ├── processor.js       # 内容处理器
+│   ├── plugin.js          # 插件系统
+│   ├── utils.js           # 工具函数
+│   └── dev-server.js      # 开发服务器
+├── plugins/                # 插件目录
+│   ├── search.js          # 搜索插件
+│   ├── seo.js             # SEO 插件
+│   └── rss.js             # RSS 插件
+├── bin/                    # CLI 工具
+│   └── cli.js
+├── dist/                   # 构建输出（自动生成）
+├── package.json           # 项目配置
+├── site.config.js         # 网站配置
+├── build.config.js        # 构建配置
+└── README.md              # 项目说明
+```
+
+## 📝 使用指南
+
+### 创建内容
+
+#### 创建文章
+
+```bash
+# 使用 CLI 创建
+npm run new post "文章标题"
+
+# 或手动创建
+touch content/posts/my-post.md
+```
+
+文章格式：
+
+```markdown
+---
+title: "文章标题"
+date: 2024-01-15
+author: "作者名称"
+categories: ["技术", "教程"]
+tags: ["标签1", "标签2"]
+description: "文章描述"
+cover: "/images/cover.jpg"
+draft: false
+featured: true
+---
+
+# 文章内容
+
+这里是文章的正文内容...
+```
+
+#### 创建页面
+
+```bash
+# 创建页面
+npm run new page "页面标题"
+```
+
+页面格式：
+
+```markdown
+---
+title: "页面标题"
+date: 2024-01-15
+template: "page"
+permalink: "/custom-url/"
+---
+
+# 页面内容
+
+这里是页面的内容...
+```
+
+### 配置网站
+
+#### 基本配置 (site.config.js)
+
+```javascript
+module.exports = {
+  // 网站基本信息
+  title: '我的网站',
+  description: '网站描述',
+  author: '作者名称',
+  url: 'https://yoursite.com',
+  
+  // 构建配置
+  build: {
+    outputDir: 'dist',
+    publicPath: '/'
+  },
+  
+  // 路由配置
+  routes: {
+    posts: {
+      path: '/posts/:slug',
+      template: 'post'
+    }
+  },
+  
+  // SEO 配置
+  seo: {
+    keywords: ['关键词1', '关键词2'],
+    ogImage: '/images/og-image.jpg'
+  }
+};
+```
+
+#### 构建配置 (build.config.js)
+
+```javascript
+module.exports = {
+  // Markdown 配置
+  markdown: {
+    highlight: true,
+    breaks: true,
+    linkify: true
+  },
+  
+  // 插件配置
+  plugins: {
+    search: {
+      enabled: true,
+      fields: ['title', 'content', 'tags']
+    },
+    seo: {
+      enabled: true,
+      sitemap: true
+    },
+    rss: {
+      enabled: true,
+      limit: 20
+    }
+  }
+};
+```
+
+### 自定义模板
+
+模板使用 EJS 语法：
+
+```html
+<!-- templates/layouts/default.ejs -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title><%= page.title %> - <%= site.title %></title>
+  <meta name="description" content="<%= page.description || site.description %>">
+</head>
+<body>
+  <header>
+    <h1><%= site.title %></h1>
+  </header>
+  
+  <main>
+    <%- content %>
+  </main>
+  
+  <footer>
+    <p>&copy; <%= new Date().getFullYear() %> <%= site.author %></p>
+  </footer>
+</body>
+</html>
+```
+
+## 🔧 命令行工具
+
+```bash
+# 开发
+npm run dev          # 启动开发服务器
+npm run build        # 构建生产版本
+npm run preview      # 预览构建结果
+npm run clean        # 清理缓存和输出
+
+# 内容管理
+npm run new post "标题"     # 创建新文章
+npm run new page "标题"     # 创建新页面
+npm run new doc "标题"      # 创建新文档
+
+# 部署
+npm run deploy       # 部署到配置的服务器
+```
+
+## 🔌 插件系统
+
+### 内置插件
+
+- **搜索插件** - 全文搜索功能
+- **SEO 插件** - SEO 优化
+- **RSS 插件** - RSS 订阅支持
+
+### 自定义插件
+
+```javascript
+// plugins/my-plugin.js
+module.exports = {
+  name: 'my-plugin',
+  version: '1.0.0',
+  
+  // 插件初始化
+  init(builder, options) {
+    console.log('插件初始化');
+  },
+  
+  // 钩子函数
+  hooks: {
+    'before:build': async (context) => {
+      console.log('构建前执行');
+    },
+    
+    'after:build': async (context) => {
+      console.log('构建后执行');
+    }
+  }
+};
+```
+
+## 🚀 部署
+
+### GitHub Pages
+
+```yaml
+# .github/workflows/deploy.yml
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+    - run: npm install
+    - run: npm run build
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./dist
+```
+
+### Netlify
+
+1. 连接 Git 仓库
+2. 构建命令：`npm run build`
+3. 发布目录：`dist`
+
+### Vercel
+
+```bash
+npm install -g vercel
+vercel
+```
+
+## 🛠️ 开发
+
+### 本地开发
+
+```bash
+# 克隆仓库
+git clone https://github.com/yourorg/static-site-generator.git
+cd static-site-generator
+
+# 安装依赖
+npm install
+
+# 启动开发
+npm run dev
+```
+
+### 测试
+
+```bash
+# 运行测试
+npm test
+
+# 运行测试覆盖率
+npm run test:coverage
+
+# 运行 lint
+npm run lint
+```
+
+### 构建
+
+```bash
+# 构建项目
+npm run build
+
+# 构建并预览
+npm run build && npm run preview
+```
+
+## 📚 文档
+
+- [快速开始](/docs/getting-started/)
+- [配置指南](/docs/configuration/)
+- [模板开发](/docs/templates/)
+- [插件开发](/docs/plugins/)
+- [部署指南](/docs/deployment/)
+- [API 文档](/docs/api/)
+
+## 🤝 贡献
+
+我们欢迎所有形式的贡献！
+
+### 贡献方式
+
+1. **报告 Bug** - 提交 Issue
+2. **功能建议** - 提交 Feature Request
+3. **代码贡献** - 提交 Pull Request
+4. **文档改进** - 改进文档和示例
+5. **社区支持** - 帮助其他用户
+
+### 开发流程
+
+1. Fork 项目
+2. 创建功能分支 (`git checkout -b feature/amazing-feature`)
+3. 提交更改 (`git commit -m 'Add some amazing feature'`)
+4. 推送到分支 (`git push origin feature/amazing-feature`)
+5. 创建 Pull Request
+
+### 代码规范
+
+- 使用 ESLint 进行代码检查
+- 遵循 JavaScript Standard Style
+- 编写测试用例
+- 更新相关文档
+
+## 📄 许可证
+
+MIT License - 详见 [LICENSE](LICENSE) 文件
+
+## 🙏 致谢
+
+感谢所有贡献者和以下开源项目：
+
+- [marked](https://github.com/markedjs/marked) - Markdown 解析器
+- [highlight.js](https://github.com/highlightjs/highlight.js) - 代码高亮
+- [ejs](https://github.com/mde/ejs) - 模板引擎
+- [express](https://github.com/expressjs/express) - Web 框架
+- [chokidar](https://github.com/paulmillr/chokidar) - 文件监听
+
+## 📞 联系我们
+
+- **GitHub**: [项目仓库](https://github.com/yourorg/static-site-generator)
+- **Issues**: [问题反馈](https://github.com/yourorg/static-site-generator/issues)
+- **Discussions**: [讨论区](https://github.com/yourorg/static-site-generator/discussions)
+- **Email**: contact@example.com
+
+---
+
+**⭐ 如果这个项目对你有帮助，请给我们一个 Star！**
 
 ## 🎯 项目愿景
 

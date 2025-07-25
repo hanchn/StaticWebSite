@@ -663,7 +663,7 @@ if (typeof module !== 'undefined' && module.exports) {
     function highlightText(text, query) {
       if (!text || !query) return text;
       
-      const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+      const regex = new RegExp('(' + query.replace(/[.*+?^${}()|\[\]\\]/g, '\\$&') + ')', 'gi');
       return text.replace(regex, '<mark>$1</mark>');
     }
     

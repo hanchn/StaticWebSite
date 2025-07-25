@@ -2,6 +2,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import ejs from 'ejs';
+import moment from 'moment';
 import config from '../config/config.js';
 import { getAllPosts, getPostBySlug, getAllCategories, getAllTags } from '../utils/markdown.js';
 import { copyDir, emptyDir, ensureDir } from '../utils/file.js';
@@ -61,6 +62,8 @@ async function generateHomePage(posts) {
     description: config.site.description,
     posts: posts.slice(0, config.content.postsPerPage),
     config,
+    moment,
+    pagination: null, // 首页不需要分页
     meta: generateMeta({
       title: config.site.title,
       description: config.site.description
@@ -95,6 +98,7 @@ async function generatePostsPage(posts) {
     const data = {
       title: `所有文章${page > 1 ? ` - 第${page}页` : ''} - ${config.site.title}`,
       posts: pagePosts,
+      allPosts: posts, // 提供所有文章用于分类筛选
       pagination: {
         current: page,
         total: totalPages,
@@ -104,6 +108,7 @@ async function generatePostsPage(posts) {
         prevPage: page - 1
       },
       config,
+      moment,
       meta: generateMeta({
         title: `所有文章${page > 1 ? ` - 第${page}页` : ''} - ${config.site.title}`
       })
@@ -136,6 +141,7 @@ async function generatePostPages(posts) {
       description: post.description || post.excerpt,
       post,
       config,
+      moment,
       meta: generateMeta({
         title: post.title,
         description: post.description || post.excerpt,
@@ -180,6 +186,7 @@ async function generateCategoryPages(categories, posts) {
       category: category.name,
       posts: categoryPosts,
       config,
+      moment,
       meta: generateMeta({
         title: `分类: ${category.name} - ${config.site.title}`,
         description: `${category.name} 分类下的所有文章`
@@ -213,6 +220,7 @@ async function generateTagPages(tags, posts) {
       tag: tag.name,
       posts: tagPosts,
       config,
+      moment,
       meta: generateMeta({
         title: `标签: ${tag.name} - ${config.site.title}`,
         description: `${tag.name} 标签下的所有文章`
@@ -240,6 +248,7 @@ async function generateAboutPage() {
     title: `关于我们 - ${config.site.title}`,
     description: '了解更多关于我们的信息',
     config,
+    moment,
     meta: generateMeta({
       title: `关于我们 - ${config.site.title}`,
       description: '了解更多关于我们的信息'

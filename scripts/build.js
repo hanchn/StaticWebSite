@@ -139,11 +139,26 @@ async function generatePostPages(posts) {
   
   await ensureDir(postDir);
   
-  for (const post of posts) {
+  for (let i = 0; i < posts.length; i++) {
+    const post = posts[i];
+    const prevPost = i > 0 ? posts[i - 1] : null;
+    const nextPost = i < posts.length - 1 ? posts[i + 1] : null;
+    
+    // 获取相关文章（同分类或同标签的文章，排除当前文章）
+    const relatedPosts = posts
+      .filter(p => p.slug !== post.slug && (
+        p.category === post.category || 
+        (post.tags && p.tags && post.tags.some(tag => p.tags.includes(tag)))
+      ))
+      .slice(0, 3);
+    
     const data = {
       title: `${post.title} - ${config.site.title}`,
       description: post.description || post.excerpt,
       post,
+      prevPost,
+      nextPost,
+      relatedPosts,
       config,
       moment,
       meta: generateMeta({
@@ -191,6 +206,7 @@ async function generateCategoryPages(categories, posts) {
       category: category.name,
       posts: categoryPosts,
       sort: 'date-desc', // 默认按日期降序排列
+      pagination: null, // 分类页不需要分页
       config,
       moment,
       meta: generateMeta({
@@ -228,6 +244,7 @@ async function generateTagPages(tags, posts) {
       posts: tagPosts,
       sort: 'date-desc', // 默认按日期降序排列
       category: '', // 默认不筛选分类
+      pagination: null, // 标签页不需要分页
       config,
       moment,
       meta: generateMeta({

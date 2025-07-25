@@ -475,7 +475,7 @@
                 </div>
                 
                 <!-- Disqus Settings -->
-                <div class="comment-config" id="disqusConfig" style="display: <%= config.comments?.system === 'disqus' ? 'block' : 'none' %>">
+                <div class="comment-config" id="disqusConfig" style="display: <% if (config.comments?.system === 'disqus') { %>block<% } else { %>none<% } %>">
                     <div class="form-group">
                         <label for="disqusShortname" class="form-label">Disqus Shortname</label>
                         <input type="text" id="disqusShortname" name="comments.disqus.shortname" class="form-input" 
@@ -485,7 +485,7 @@
                 </div>
                 
                 <!-- Gitalk Settings -->
-                <div class="comment-config" id="gitalkConfig" style="display: <%= config.comments?.system === 'gitalk' ? 'block' : 'none' %>">
+                <div class="comment-config" id="gitalkConfig" style="display: <% if (config.comments?.system === 'gitalk') { %>block<% } else { %>none<% } %>">
                     <div class="form-group">
                         <label for="gitalkClientId" class="form-label">GitHub Client ID</label>
                         <input type="text" id="gitalkClientId" name="comments.gitalk.clientId" class="form-input" 
@@ -516,7 +516,7 @@
                 </div>
                 
                 <!-- Valine Settings -->
-                <div class="comment-config" id="valineConfig" style="display: <%= config.comments?.system === 'valine' ? 'block' : 'none' %>">
+                <div class="comment-config" id="valineConfig" style="display: <% if (config.comments?.system === 'valine') { %>block<% } else { %>none<% } %>">
                     <div class="form-group">
                         <label for="valineAppId" class="form-label">LeanCloud App ID</label>
                         <input type="text" id="valineAppId" name="comments.valine.appId" class="form-input" 

@@ -1,0 +1,91 @@
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-content">
+    <h1 class="hero-title">欢迎来到 <%= site.title %></h1>
+    <p class="hero-description"><%= site.description %></p>
+    <div class="hero-actions">
+      <a href="/posts/" class="btn btn-primary">阅读文章</a>
+      <a href="/about/" class="btn btn-secondary">了解更多</a>
+    </div>
+  </div>
+</section>
+
+<!-- Recent Posts -->
+<section class="recent-posts">
+  <div class="section-header">
+    <h2 class="section-title">最新文章</h2>
+    <a href="/posts/" class="section-link">查看全部</a>
+  </div>
+  
+  <% if (posts && posts.length > 0) { %>
+  <div class="posts-grid">
+    <% posts.forEach(function(post) { %>
+    <article class="post-card">
+      <div class="post-meta">
+        <time class="post-date" datetime="<%= new Date(post.date).toISOString() %>">
+          <%= new Date(post.date).toLocaleDateString('zh-CN') %>
+        </time>
+        <% if (post.category) { %>
+        <span class="post-category"><%= post.category %></span>
+        <% } %>
+      </div>
+      
+      <h3 class="post-title">
+        <a href="<%= post.url %>"><%= post.title %></a>
+      </h3>
+      
+      <% if (post.excerpt) { %>
+      <p class="post-excerpt"><%= post.excerpt %></p>
+      <% } %>
+      
+      <% if (post.tags && post.tags.length > 0) { %>
+      <div class="post-tags">
+        <% post.tags.forEach(function(tag) { %>
+        <span class="tag">#<%= tag %></span>
+        <% }); %>
+      </div>
+      <% } %>
+      
+      <a href="<%= post.url %>" class="read-more">阅读更多</a>
+    </article>
+    <% }); %>
+  </div>
+  <% } else { %>
+  <div class="empty-state">
+    <p>暂无文章，请稍后再来。</p>
+  </div>
+  <% } %>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+  <div class="section-header">
+    <h2 class="section-title">特色功能</h2>
+  </div>
+  
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📝</div>
+      <h3 class="feature-title">Markdown 支持</h3>
+      <p class="feature-description">使用 Markdown 语法轻松编写文章，支持代码高亮和数学公式。</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">🚀</div>
+      <h3 class="feature-title">快速构建</h3>
+      <p class="feature-description">高性能的静态网站生成器，支持增量构建和缓存优化。</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">📱</div>
+      <h3 class="feature-title">响应式设计</h3>
+      <p class="feature-description">完美适配各种设备，提供优秀的移动端阅读体验。</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">🔍</div>
+      <h3 class="feature-title">SEO 优化</h3>
+      <p class="feature-description">内置 SEO 优化，自动生成 sitemap 和 RSS 订阅。</p>
+    </div>
+  </div>
+</section>

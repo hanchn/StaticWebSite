@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="<%= site.language %>">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><% if (typeof page !== 'undefined' && page.title) { %><%= page.title %> - <% } %><% if (typeof post !== 'undefined' && post.title) { %><%= post.title %> - <% } %><%= site.title %></title>
+  <meta name="description" content="<% if (typeof page !== 'undefined' && page.description) { %><%= page.description %><% } else if (typeof post !== 'undefined' && post.excerpt) { %><%= post.excerpt %><% } else { %><%= site.description %><% } %>">
+  <meta name="author" content="<%= site.author %>">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="<% if (typeof page !== 'undefined' && page.title) { %><%= page.title %><% } else if (typeof post !== 'undefined' && post.title) { %><%= post.title %><% } else { %><%= site.title %><% } %>">
+  <meta property="og:description" content="<% if (typeof page !== 'undefined' && page.description) { %><%= page.description %><% } else if (typeof post !== 'undefined' && post.excerpt) { %><%= post.excerpt %><% } else { %><%= site.description %><% } %>">
+  <meta property="og:type" content="<% if (typeof post !== 'undefined') { %>article<% } else { %>website<% } %>">
+  <meta property="og:url" content="<%= site.url %><% if (typeof page !== 'undefined') { %><%= page.url %><% } else if (typeof post !== 'undefined') { %><%= post.url %><% } %>">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="<% if (typeof page !== 'undefined' && page.title) { %><%= page.title %><% } else if (typeof post !== 'undefined' && post.title) { %><%= post.title %><% } else { %><%= site.title %><% } %>">
+  <meta name="twitter:description" content="<% if (typeof page !== 'undefined' && page.description) { %><%= page.description %><% } else if (typeof post !== 'undefined' && post.excerpt) { %><%= post.excerpt %><% } else { %><%= site.description %><% } %>">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+  
+  <!-- RSS Feed -->
+  <link rel="alternate" type="application/rss+xml" title="<%= site.title %>" href="/rss.xml">
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <div class="header-content">
+        <div class="site-branding">
+          <h1 class="site-title">
+            <a href="/"><%= site.title %></a>
+          </h1>
+          <p class="site-description"><%= site.description %></p>
+        </div>
+        
+        <nav class="site-nav">
+          <ul class="nav-menu">
+            <% nav.forEach(function(item) { %>
+            <li class="nav-item">
+              <a href="<%= item.url %>" class="nav-link"><%= item.name %></a>
+            </li>
+            <% }); %>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+  
+  <!-- Main Content -->
+  <main class="site-main">
+    <div class="container">
+      <%- content %>
+    </div>
+  </main>
+  
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; <%= new Date().getFullYear() %> <%= site.title %>. All rights reserved.</p>
+        <p>Powered by <a href="#" target="_blank">Simple Static Generator</a></p>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- Scripts -->
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>

@@ -97,8 +97,12 @@ async function generatePostsPage(posts) {
     
     const data = {
       title: `所有文章${page > 1 ? ` - 第${page}页` : ''} - ${config.site.title}`,
+      description: '浏览所有文章',
       posts: pagePosts,
       allPosts: posts, // 提供所有文章用于分类筛选
+      search: '', // 默认搜索关键词为空
+      category: '', // 默认不筛选分类
+      sort: 'date-desc', // 默认按日期降序排列
       pagination: {
         current: page,
         total: totalPages,
@@ -183,8 +187,10 @@ async function generateCategoryPages(categories, posts) {
     
     const data = {
       title: `分类: ${category.name} - ${config.site.title}`,
+      description: `${category.name} 分类下的所有文章`,
       category: category.name,
       posts: categoryPosts,
+      sort: 'date-desc', // 默认按日期降序排列
       config,
       moment,
       meta: generateMeta({
@@ -219,6 +225,8 @@ async function generateTagPages(tags, posts) {
       title: `标签: ${tag.name} - ${config.site.title}`,
       tag: tag.name,
       posts: tagPosts,
+      sort: 'date-desc', // 默认按日期降序排列
+      category: '', // 默认不筛选分类
       config,
       moment,
       meta: generateMeta({

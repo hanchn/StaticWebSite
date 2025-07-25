@@ -223,6 +223,7 @@ async function generateTagPages(tags, posts) {
     
     const data = {
       title: `标签: ${tag.name} - ${config.site.title}`,
+      description: `${tag.name} 标签下的所有文章`,
       tag: tag.name,
       posts: tagPosts,
       sort: 'date-desc', // 默认按日期降序排列

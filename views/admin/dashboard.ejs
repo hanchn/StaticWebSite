@@ -1,0 +1,650 @@
+<!-- Dashboard Header -->
+<div class="admin-header">
+    <h1 class="admin-title">
+        <i class="fas fa-tachometer-alt"></i>
+        仪表盘
+    </h1>
+    <p class="admin-subtitle">欢迎回来！这里是您的博客管理中心</p>
+</div>
+
+<!-- Quick Actions -->
+<div class="quick-actions">
+    <a href="/admin/posts/new" class="quick-action">
+        <div class="action-icon">
+            <i class="fas fa-plus"></i>
+        </div>
+        <div class="action-content">
+            <h3>写新文章</h3>
+            <p>创建一篇新的博客文章</p>
+        </div>
+    </a>
+    
+    <a href="/admin/posts" class="quick-action">
+        <div class="action-icon">
+            <i class="fas fa-edit"></i>
+        </div>
+        <div class="action-content">
+            <h3>管理文章</h3>
+            <p>编辑或删除现有文章</p>
+        </div>
+    </a>
+    
+    <a href="/admin/media" class="quick-action">
+        <div class="action-icon">
+            <i class="fas fa-images"></i>
+        </div>
+        <div class="action-content">
+            <h3>媒体库</h3>
+            <p>管理图片和文件</p>
+        </div>
+    </a>
+    
+    <a href="/admin/settings" class="quick-action">
+        <div class="action-icon">
+            <i class="fas fa-cog"></i>
+        </div>
+        <div class="action-content">
+            <h3>站点设置</h3>
+            <p>配置博客基本信息</p>
+        </div>
+    </a>
+</div>
+
+<!-- Statistics Cards -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon posts">
+            <i class="fas fa-file-alt"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-number" id="totalPosts">-</div>
+            <div class="stat-label">总文章数</div>
+            <div class="stat-change positive" id="postsChange">+0 本月</div>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon categories">
+            <i class="fas fa-folder"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-number" id="totalCategories">-</div>
+            <div class="stat-label">分类数量</div>
+            <div class="stat-change" id="categoriesChange">+0 本月</div>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon tags">
+            <i class="fas fa-tags"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-number" id="totalTags">-</div>
+            <div class="stat-label">标签数量</div>
+            <div class="stat-change" id="tagsChange">+0 本月</div>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon views">
+            <i class="fas fa-eye"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-number" id="totalViews">-</div>
+            <div class="stat-label">总浏览量</div>
+            <div class="stat-change positive" id="viewsChange">+0 本月</div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Grid -->
+<div class="dashboard-grid">
+    <!-- Recent Posts -->
+    <div class="dashboard-card recent-posts">
+        <div class="card-header">
+            <h2>
+                <i class="fas fa-clock"></i>
+                最近文章
+            </h2>
+            <a href="/admin/posts" class="view-all">查看全部</a>
+        </div>
+        <div class="card-content">
+            <div class="posts-list" id="recentPosts">
+                <div class="loading">加载中...</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Stats -->
+    <div class="dashboard-card quick-stats">
+        <div class="card-header">
+            <h2>
+                <i class="fas fa-chart-line"></i>
+                快速统计
+            </h2>
+        </div>
+        <div class="card-content">
+            <div class="stats-list">
+                <div class="stat-item">
+                    <span class="stat-name">草稿文章</span>
+                    <span class="stat-value" id="draftPosts">-</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-name">已发布</span>
+                    <span class="stat-value" id="publishedPosts">-</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-name">今日访问</span>
+                    <span class="stat-value" id="todayViews">-</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-name">平均阅读时间</span>
+                    <span class="stat-value" id="avgReadTime">- 分钟</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-name">最后更新</span>
+                    <span class="stat-value" id="lastUpdate">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Popular Posts -->
+    <div class="dashboard-card popular-posts">
+        <div class="card-header">
+            <h2>
+                <i class="fas fa-fire"></i>
+                热门文章
+            </h2>
+            <select class="period-select" id="popularPeriod">
+                <option value="week">本周</option>
+                <option value="month" selected>本月</option>
+                <option value="year">本年</option>
+            </select>
+        </div>
+        <div class="card-content">
+            <div class="popular-list" id="popularPosts">
+                <div class="loading">加载中...</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- System Status -->
+    <div class="dashboard-card system-status">
+        <div class="card-header">
+            <h2>
+                <i class="fas fa-server"></i>
+                系统状态
+            </h2>
+            <button class="refresh-btn" id="refreshStatus" title="刷新状态">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+        </div>
+        <div class="card-content">
+            <div class="status-list">
+                <div class="status-item">
+                    <div class="status-indicator good" id="serverStatus"></div>
+                    <span class="status-name">服务器状态</span>
+                    <span class="status-value">正常</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-indicator good" id="buildStatus"></div>
+                    <span class="status-name">构建状态</span>
+                    <span class="status-value" id="buildStatusText">就绪</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-indicator" id="diskStatus"></div>
+                    <span class="status-name">磁盘使用</span>
+                    <span class="status-value" id="diskUsage">- %</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-indicator" id="memoryStatus"></div>
+                    <span class="status-name">内存使用</span>
+                    <span class="status-value" id="memoryUsage">- %</span>
+                </div>
+            </div>
+            
+            <div class="system-actions">
+                <button class="btn btn-sm btn-outline" id="clearCache">
+                    <i class="fas fa-trash"></i>
+                    清理缓存
+                </button>
+                <button class="btn btn-sm btn-primary" id="buildSite">
+                    <i class="fas fa-hammer"></i>
+                    构建站点
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Activity -->
+    <div class="dashboard-card recent-activity">
+        <div class="card-header">
+            <h2>
+                <i class="fas fa-history"></i>
+                最近活动
+            </h2>
+        </div>
+        <div class="card-content">
+            <div class="activity-list" id="recentActivity">
+                <div class="loading">加载中...</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Storage Usage -->
+    <div class="dashboard-card storage-usage">
+        <div class="card-header">
+            <h2>
+                <i class="fas fa-hdd"></i>
+                存储使用
+            </h2>
+        </div>
+        <div class="card-content">
+            <div class="storage-breakdown">
+                <div class="storage-item">
+                    <div class="storage-info">
+                        <span class="storage-type">文章内容</span>
+                        <span class="storage-size" id="postsSize">- MB</span>
+                    </div>
+                    <div class="storage-bar">
+                        <div class="storage-fill posts" id="postsBar"></div>
+                    </div>
+                </div>
+                
+                <div class="storage-item">
+                    <div class="storage-info">
+                        <span class="storage-type">媒体文件</span>
+                        <span class="storage-size" id="mediaSize">- MB</span>
+                    </div>
+                    <div class="storage-bar">
+                        <div class="storage-fill media" id="mediaBar"></div>
+                    </div>
+                </div>
+                
+                <div class="storage-item">
+                    <div class="storage-info">
+                        <span class="storage-type">静态文件</span>
+                        <span class="storage-size" id="staticSize">- MB</span>
+                    </div>
+                    <div class="storage-bar">
+                        <div class="storage-fill static" id="staticBar"></div>
+                    </div>
+                </div>
+                
+                <div class="storage-total">
+                    <strong>总计: <span id="totalSize">- MB</span></strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 初始化仪表盘
+    initDashboard();
+    
+    // 绑定事件
+    bindEvents();
+    
+    // 定时刷新数据
+    setInterval(refreshStats, 30000); // 30秒刷新一次
+    
+    function initDashboard() {
+        loadStats();
+        loadRecentPosts();
+        loadPopularPosts();
+        loadRecentActivity();
+        loadSystemStatus();
+        loadStorageUsage();
+    }
+    
+    function bindEvents() {
+        // 刷新状态按钮
+        document.getElementById('refreshStatus')?.addEventListener('click', loadSystemStatus);
+        
+        // 热门文章时间段选择
+        document.getElementById('popularPeriod')?.addEventListener('change', loadPopularPosts);
+        
+        // 清理缓存
+        document.getElementById('clearCache')?.addEventListener('click', clearCache);
+        
+        // 构建站点
+        document.getElementById('buildSite')?.addEventListener('click', buildSite);
+    }
+    
+    async function loadStats() {
+        try {
+            const response = await fetch('/api/stats');
+            const stats = await response.json();
+            
+            // 更新统计数字
+            updateElement('totalPosts', stats.totalPosts || 0);
+            updateElement('totalCategories', stats.totalCategories || 0);
+            updateElement('totalTags', stats.totalTags || 0);
+            updateElement('totalViews', formatNumber(stats.totalViews || 0));
+            
+            // 更新变化数据
+            updateChange('postsChange', stats.postsChange || 0, '本月');
+            updateChange('categoriesChange', stats.categoriesChange || 0, '本月');
+            updateChange('tagsChange', stats.tagsChange || 0, '本月');
+            updateChange('viewsChange', stats.viewsChange || 0, '本月');
+            
+            // 更新快速统计
+            updateElement('draftPosts', stats.draftPosts || 0);
+            updateElement('publishedPosts', stats.publishedPosts || 0);
+            updateElement('todayViews', stats.todayViews || 0);
+            updateElement('avgReadTime', (stats.avgReadTime || 0) + ' 分钟');
+            updateElement('lastUpdate', formatDate(stats.lastUpdate));
+            
+        } catch (error) {
+            console.error('加载统计数据失败:', error);
+        }
+    }
+    
+    async function loadRecentPosts() {
+        try {
+            const response = await fetch('/api/posts?limit=5&sort=created_desc');
+            const posts = await response.json();
+            
+            const container = document.getElementById('recentPosts');
+            if (!container) return;
+            
+            if (posts.length === 0) {
+                container.innerHTML = '<div class="empty-state">暂无文章</div>';
+                return;
+            }
+            
+            container.innerHTML = posts.map(post => `
+                <div class="post-item">
+                    <div class="post-info">
+                        <h4 class="post-title">
+                            <a href="/admin/posts/edit/${post.slug}">${post.title}</a>
+                        </h4>
+                        <div class="post-meta">
+                            <span class="post-date">${formatDate(post.created_at)}</span>
+                            <span class="post-status ${post.status}">${getStatusText(post.status)}</span>
+                            <span class="post-category">${post.category || '未分类'}</span>
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <a href="/admin/posts/edit/${post.slug}" class="btn btn-sm btn-outline" title="编辑">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="/posts/${post.slug}" class="btn btn-sm btn-outline" title="查看" target="_blank">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+            
+        } catch (error) {
+            console.error('加载最近文章失败:', error);
+            document.getElementById('recentPosts').innerHTML = '<div class="error-state">加载失败</div>';
+        }
+    }
+    
+    async function loadPopularPosts() {
+        try {
+            const period = document.getElementById('popularPeriod')?.value || 'month';
+            const response = await fetch(`/api/posts/popular?period=${period}&limit=5`);
+            const posts = await response.json();
+            
+            const container = document.getElementById('popularPosts');
+            if (!container) return;
+            
+            if (posts.length === 0) {
+                container.innerHTML = '<div class="empty-state">暂无数据</div>';
+                return;
+            }
+            
+            container.innerHTML = posts.map((post, index) => `
+                <div class="popular-item">
+                    <div class="popular-rank">${index + 1}</div>
+                    <div class="popular-info">
+                        <h4 class="popular-title">
+                            <a href="/posts/${post.slug}" target="_blank">${post.title}</a>
+                        </h4>
+                        <div class="popular-stats">
+                            <span class="views">
+                                <i class="fas fa-eye"></i>
+                                ${formatNumber(post.views || 0)}
+                            </span>
+                            <span class="category">${post.category || '未分类'}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+        } catch (error) {
+            console.error('加载热门文章失败:', error);
+            document.getElementById('popularPosts').innerHTML = '<div class="error-state">加载失败</div>';
+        }
+    }
+    
+    async function loadRecentActivity() {
+        try {
+            const response = await fetch('/api/activity?limit=10');
+            const activities = await response.json();
+            
+            const container = document.getElementById('recentActivity');
+            if (!container) return;
+            
+            if (activities.length === 0) {
+                container.innerHTML = '<div class="empty-state">暂无活动记录</div>';
+                return;
+            }
+            
+            container.innerHTML = activities.map(activity => `
+                <div class="activity-item">
+                    <div class="activity-icon ${activity.type}">
+                        <i class="fas ${getActivityIcon(activity.type)}"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-text">${activity.description}</div>
+                        <div class="activity-time">${formatTimeAgo(activity.created_at)}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+        } catch (error) {
+            console.error('加载活动记录失败:', error);
+            document.getElementById('recentActivity').innerHTML = '<div class="error-state">加载失败</div>';
+        }
+    }
+    
+    async function loadSystemStatus() {
+        try {
+            const response = await fetch('/api/system/status');
+            const status = await response.json();
+            
+            // 更新状态指示器
+            updateStatusIndicator('serverStatus', status.server || 'good');
+            updateStatusIndicator('buildStatus', status.build || 'good');
+            updateStatusIndicator('diskStatus', getDiskStatus(status.disk?.usage || 0));
+            updateStatusIndicator('memoryStatus', getMemoryStatus(status.memory?.usage || 0));
+            
+            // 更新状态文本
+            updateElement('buildStatusText', status.build === 'good' ? '就绪' : '异常');
+            updateElement('diskUsage', (status.disk?.usage || 0) + '%');
+            updateElement('memoryUsage', (status.memory?.usage || 0) + '%');
+            
+        } catch (error) {
+            console.error('加载系统状态失败:', error);
+        }
+    }
+    
+    async function loadStorageUsage() {
+        try {
+            const response = await fetch('/api/system/storage');
+            const storage = await response.json();
+            
+            const total = storage.total || 100;
+            
+            // 更新存储使用情况
+            updateElement('postsSize', formatSize(storage.posts?.size || 0));
+            updateElement('mediaSize', formatSize(storage.media?.size || 0));
+            updateElement('staticSize', formatSize(storage.static?.size || 0));
+            updateElement('totalSize', formatSize(total));
+            
+            // 更新进度条
+            updateStorageBar('postsBar', (storage.posts?.size || 0) / total * 100);
+            updateStorageBar('mediaBar', (storage.media?.size || 0) / total * 100);
+            updateStorageBar('staticBar', (storage.static?.size || 0) / total * 100);
+            
+        } catch (error) {
+            console.error('加载存储使用情况失败:', error);
+        }
+    }
+    
+    async function clearCache() {
+        try {
+            showLoading('正在清理缓存...');
+            const response = await fetch('/api/system/clear-cache', { method: 'POST' });
+            const result = await response.json();
+            
+            hideLoading();
+            
+            if (result.success) {
+                showToast('缓存清理成功', 'success');
+            } else {
+                showToast('缓存清理失败: ' + result.message, 'error');
+            }
+        } catch (error) {
+            hideLoading();
+            showToast('缓存清理失败', 'error');
+            console.error('清理缓存失败:', error);
+        }
+    }
+    
+    async function buildSite() {
+        try {
+            showLoading('正在构建站点...');
+            const response = await fetch('/api/build', { method: 'POST' });
+            const result = await response.json();
+            
+            hideLoading();
+            
+            if (result.success) {
+                showToast('站点构建成功', 'success');
+                loadSystemStatus(); // 刷新系统状态
+            } else {
+                showToast('站点构建失败: ' + result.message, 'error');
+            }
+        } catch (error) {
+            hideLoading();
+            showToast('站点构建失败', 'error');
+            console.error('构建站点失败:', error);
+        }
+    }
+    
+    function refreshStats() {
+        loadStats();
+        loadSystemStatus();
+    }
+    
+    // 辅助函数
+    function updateElement(id, value) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.textContent = value;
+        }
+    }
+    
+    function updateChange(id, value, suffix) {
+        const element = document.getElementById(id);
+        if (element) {
+            const sign = value > 0 ? '+' : '';
+            element.textContent = `${sign}${value} ${suffix}`;
+            element.className = value > 0 ? 'stat-change positive' : value < 0 ? 'stat-change negative' : 'stat-change';
+        }
+    }
+    
+    function updateStatusIndicator(id, status) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.className = `status-indicator ${status}`;
+        }
+    }
+    
+    function updateStorageBar(id, percentage) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.style.width = Math.min(percentage, 100) + '%';
+        }
+    }
+    
+    function formatNumber(num) {
+        if (num >= 1000000) {
+            return (num / 1000000).toFixed(1) + 'M';
+        } else if (num >= 1000) {
+            return (num / 1000).toFixed(1) + 'K';
+        }
+        return num.toString();
+    }
+    
+    function formatSize(bytes) {
+        if (bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+    
+    function formatDate(dateString) {
+        if (!dateString) return '-';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('zh-CN') + ' ' + date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+    }
+    
+    function formatTimeAgo(dateString) {
+        if (!dateString) return '-';
+        const date = new Date(dateString);
+        const now = new Date();
+        const diff = now - date;
+        
+        const minutes = Math.floor(diff / 60000);
+        const hours = Math.floor(diff / 3600000);
+        const days = Math.floor(diff / 86400000);
+        
+        if (days > 0) return `${days}天前`;
+        if (hours > 0) return `${hours}小时前`;
+        if (minutes > 0) return `${minutes}分钟前`;
+        return '刚刚';
+    }
+    
+    function getStatusText(status) {
+        const statusMap = {
+            'published': '已发布',
+            'draft': '草稿',
+            'private': '私有'
+        };
+        return statusMap[status] || status;
+    }
+    
+    function getActivityIcon(type) {
+        const iconMap = {
+            'post_created': 'fa-plus',
+            'post_updated': 'fa-edit',
+            'post_deleted': 'fa-trash',
+            'media_uploaded': 'fa-upload',
+            'site_built': 'fa-hammer',
+            'settings_updated': 'fa-cog'
+        };
+        return iconMap[type] || 'fa-info';
+    }
+    
+    function getDiskStatus(usage) {
+        if (usage > 90) return 'danger';
+        if (usage > 70) return 'warning';
+        return 'good';
+    }
+    
+    function getMemoryStatus(usage) {
+        if (usage > 85) return 'danger';
+        if (usage > 70) return 'warning';
+        return 'good';
+    }
+});
+</script>

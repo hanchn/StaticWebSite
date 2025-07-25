@@ -1,0 +1,192 @@
+<!-- Tag Header -->
+<header class="tag-header">
+  <div class="tag-info">
+    <h1 class="tag-title">
+      <span class="tag-icon">#</span>
+      <%= tag.name %>
+    </h1>
+    <% if (tag.description) { %>
+    <p class="tag-description"><%= tag.description %></p>
+    <% } %>
+    
+    <div class="tag-meta">
+      <span class="tag-count"><%= posts.length %> 篇文章</span>
+      <% if (tag.color) { %>
+      <span class="tag-color" data-color="<%= tag.color %>"></span>
+      <% } %>
+    </div>
+  </div>
+  
+  <div class="tag-actions">
+    <a href="/posts/" class="btn btn-secondary">所有文章</a>
+    <a href="/tags/" class="btn btn-outline">所有标签</a>
+  </div>
+</header>
+
+<!-- Posts List -->
+<% if (posts && posts.length > 0) { %>
+<section class="tag-posts">
+  <div class="posts-header">
+    <h2 class="section-title">相关文章</h2>
+    
+    <div class="posts-sort">
+      <select id="sort-posts" class="sort-select">
+        <option value="date-desc">最新发布</option>
+        <option value="date-asc">最早发布</option>
+        <option value="title">标题排序</option>
+      </select>
+    </div>
+  </div>
+  
+  <div class="posts-list" id="posts-list">
+    <% posts.forEach(function(post, index) { %>
+    <article class="post-item" data-date="<%= new Date(post.date).getTime() %>" data-title="<%= post.title.toLowerCase() %>">
+      <div class="post-meta">
+        <time class="post-date" datetime="<%= new Date(post.date).toISOString() %>">
+          <%= new Date(post.date).toLocaleDateString('zh-CN') %>
+        </time>
+        <% if (post.category) { %>
+        <span class="post-category"><%= post.category %></span>
+        <% } %>
+      </div>
+      
+      <h3 class="post-title">
+        <a href="<%= post.url %>"><%= post.title %></a>
+      </h3>
+      
+      <% if (post.excerpt) { %>
+      <p class="post-excerpt"><%= post.excerpt %></p>
+      <% } %>
+      
+      <div class="post-footer">
+        <div class="post-tags">
+          <% if (post.tags && post.tags.length > 0) { %>
+            <% post.tags.forEach(function(postTag) { %>
+              <% if (postTag !== tag.name) { %>
+              <a href="/tags/<%= postTag.toLowerCase().replace(/\s+/g, '-') %>/" class="tag">#<%= postTag %></a>
+              <% } %>
+            <% }); %>
+          <% } %>
+        </div>
+        
+        <div class="post-actions">
+          <a href="<%= post.url %>" class="read-more">阅读更多</a>
+          <% if (post.readingTime) { %>
+          <span class="reading-time"><%= post.readingTime %> 分钟</span>
+          <% } %>
+        </div>
+      </div>
+    </article>
+    <% }); %>
+  </div>
+</section>
+<% } else { %>
+<div class="empty-state">
+  <div class="empty-icon">🏷️</div>
+  <h3>暂无相关文章</h3>
+  <p>该标签下还没有任何文章。</p>
+  <a href="/posts/" class="btn btn-primary">浏览所有文章</a>
+</div>
+<% } %>
+
+<!-- Related Tags -->
+<% if (relatedTags && relatedTags.length > 0) { %>
+<section class="related-tags">
+  <h2 class="section-title">相关标签</h2>
+  
+  <div class="tags-cloud">
+    <% relatedTags.forEach(function(relatedTag) { %>
+    <a href="/tags/<%= relatedTag.slug %>/" class="tag-link" data-count="<%= relatedTag.count %>">
+      <span class="tag-name">#<%= relatedTag.name %></span>
+      <span class="tag-count">(<%= relatedTag.count %>)</span>
+    </a>
+    <% }); %>
+  </div>
+</section>
+<% } %>
+
+<!-- Tag Statistics -->
+<% if (posts && posts.length > 0) { %>
+<section class="tag-stats">
+  <h2 class="section-title">统计信息</h2>
+  
+  <div class="stats-grid">
+    <div class="stat-item">
+      <div class="stat-number"><%= posts.length %></div>
+      <div class="stat-label">文章数量</div>
+    </div>
+    
+    <div class="stat-item">
+      <div class="stat-number"><%= posts.reduce((total, post) => total + (post.readingTime || 5), 0) %></div>
+      <div class="stat-label">总阅读时间(分钟)</div>
+    </div>
+    
+    <div class="stat-item">
+      <div class="stat-number"><%= new Date(Math.max(...posts.map(p => new Date(p.date)))).getFullYear() %></div>
+      <div class="stat-label">最新文章年份</div>
+    </div>
+    
+    <div class="stat-item">
+      <div class="stat-number"><%= new Set(posts.map(p => p.category).filter(Boolean)).size %></div>
+      <div class="stat-label">涉及分类</div>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<script>
+// 文章排序功能
+(function() {
+  const sortSelect = document.getElementById('sort-posts');
+  const postsList = document.getElementById('posts-list');
+  
+  if (!sortSelect || !postsList) return;
+  
+  const posts = Array.from(postsList.querySelectorAll('.post-item'));
+  
+  function sortPosts() {
+    const sortBy = sortSelect.value;
+    
+    const sortedPosts = posts.sort((a, b) => {
+      switch (sortBy) {
+        case 'date-desc':
+          return parseInt(b.dataset.date) - parseInt(a.dataset.date);
+        case 'date-asc':
+          return parseInt(a.dataset.date) - parseInt(b.dataset.date);
+        case 'title':
+          return a.dataset.title.localeCompare(b.dataset.title);
+        default:
+          return 0;
+      }
+    });
+    
+    // 重新排列 DOM 元素
+    sortedPosts.forEach(post => {
+      postsList.appendChild(post);
+    });
+  }
+  
+  sortSelect.addEventListener('change', sortPosts);
+})();
+
+// 标签云效果
+(function() {
+  const tagLinks = document.querySelectorAll('.tag-link');
+  
+  if (tagLinks.length === 0) return;
+  
+  // 根据文章数量调整标签大小
+  const counts = Array.from(tagLinks).map(link => parseInt(link.dataset.count));
+  const maxCount = Math.max(...counts);
+  const minCount = Math.min(...counts);
+  
+  tagLinks.forEach(link => {
+    const count = parseInt(link.dataset.count);
+    const ratio = (count - minCount) / (maxCount - minCount) || 0;
+    const fontSize = 0.8 + (ratio * 0.6); // 0.8em to 1.4em
+    
+    link.style.fontSize = fontSize + 'em';
+    link.style.opacity = 0.6 + (ratio * 0.4); // 0.6 to 1.0
+  });
+})();
+</script>

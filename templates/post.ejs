@@ -1,0 +1,122 @@
+<!-- Post Header -->
+<article class="post">
+  <header class="post-header">
+    <div class="post-meta">
+      <time class="post-date" datetime="<%= new Date(post.date).toISOString() %>">
+        <%= new Date(post.date).toLocaleDateString('zh-CN') %>
+      </time>
+      <% if (post.category) { %>
+      <span class="post-category"><%= post.category %></span>
+      <% } %>
+      <% if (post.readingTime) { %>
+      <span class="reading-time">阅读时间: <%= post.readingTime %> 分钟</span>
+      <% } %>
+    </div>
+    
+    <h1 class="post-title"><%= post.title %></h1>
+    
+    <% if (post.excerpt) { %>
+    <p class="post-excerpt"><%= post.excerpt %></p>
+    <% } %>
+    
+    <% if (post.tags && post.tags.length > 0) { %>
+    <div class="post-tags">
+      <% post.tags.forEach(function(tag) { %>
+      <a href="/tags/<%= tag.toLowerCase().replace(/\s+/g, '-') %>/" class="tag">#<%= tag %></a>
+      <% }); %>
+    </div>
+    <% } %>
+  </header>
+  
+  <!-- Post Content -->
+  <div class="post-content">
+    <%- post.content %>
+  </div>
+  
+  <!-- Post Footer -->
+  <footer class="post-footer">
+    <div class="post-share">
+      <h4>分享这篇文章</h4>
+      <div class="share-buttons">
+        <a href="https://twitter.com/intent/tweet?text=<%= encodeURIComponent(post.title) %>&url=<%= encodeURIComponent(site.url + post.url) %>" target="_blank" class="share-btn twitter">
+          <span class="share-icon">🐦</span>
+          Twitter
+        </a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent(site.url + post.url) %>" target="_blank" class="share-btn facebook">
+          <span class="share-icon">📘</span>
+          Facebook
+        </a>
+        <a href="mailto:?subject=<%= encodeURIComponent(post.title) %>&body=<%= encodeURIComponent('我发现了一篇有趣的文章：' + post.title + ' ' + site.url + post.url) %>" class="share-btn email">
+          <span class="share-icon">📧</span>
+          Email
+        </a>
+      </div>
+    </div>
+    
+    <% if (post.author) { %>
+    <div class="post-author">
+      <h4>关于作者</h4>
+      <div class="author-info">
+        <% if (post.author.avatar) { %>
+        <img src="<%= post.author.avatar %>" alt="<%= post.author.name %>" class="author-avatar">
+        <% } %>
+        <div class="author-details">
+          <h5 class="author-name"><%= post.author.name %></h5>
+          <% if (post.author.bio) { %>
+          <p class="author-bio"><%= post.author.bio %></p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+    <% } %>
+  </footer>
+</article>
+
+<!-- Navigation -->
+<nav class="post-navigation">
+  <% if (post.prev) { %>
+  <div class="nav-previous">
+    <a href="<%= post.prev.url %>" class="nav-link">
+      <span class="nav-direction">← 上一篇</span>
+      <span class="nav-title"><%= post.prev.title %></span>
+    </a>
+  </div>
+  <% } %>
+  
+  <% if (post.next) { %>
+  <div class="nav-next">
+    <a href="<%= post.next.url %>" class="nav-link">
+      <span class="nav-direction">下一篇 →</span>
+      <span class="nav-title"><%= post.next.title %></span>
+    </a>
+  </div>
+  <% } %>
+</nav>
+
+<!-- Related Posts -->
+<% if (post.related && post.related.length > 0) { %>
+<section class="related-posts">
+  <h3 class="section-title">相关文章</h3>
+  <div class="posts-grid">
+    <% post.related.forEach(function(relatedPost) { %>
+    <article class="post-card">
+      <div class="post-meta">
+        <time class="post-date" datetime="<%= new Date(relatedPost.date).toISOString() %>">
+          <%= new Date(relatedPost.date).toLocaleDateString('zh-CN') %>
+        </time>
+      </div>
+      
+      <h4 class="post-title">
+        <a href="<%= relatedPost.url %>"><%= relatedPost.title %></a>
+      </h4>
+      
+      <% if (relatedPost.excerpt) { %>
+      <p class="post-excerpt"><%= relatedPost.excerpt %></p>
+      <% } %>
+      
+      <a href="<%= relatedPost.url %>" class="read-more">阅读更多</a>
+    </article>
+    <% }); %>
+  </div>
+</section>
+<% } %>

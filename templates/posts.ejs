@@ -1,0 +1,211 @@
+<!-- Page Header -->
+<header class="page-header">
+  <h1 class="page-title">所有文章</h1>
+  <p class="page-description">探索我们的文章集合，发现有趣的内容</p>
+</header>
+
+<!-- Posts Filter -->
+<div class="posts-filter">
+  <div class="filter-controls">
+    <div class="search-box">
+      <input type="text" id="search-input" placeholder="搜索文章..." class="search-input">
+      <button type="button" class="search-btn">🔍</button>
+    </div>
+    
+    <div class="filter-options">
+      <select id="category-filter" class="filter-select">
+        <option value="">所有分类</option>
+        <!-- 分类选项将通过 JavaScript 动态生成 -->
+      </select>
+      
+      <select id="sort-filter" class="filter-select">
+        <option value="date-desc">最新发布</option>
+        <option value="date-asc">最早发布</option>
+        <option value="title">标题排序</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- Posts Grid -->
+<% if (posts && posts.length > 0) { %>
+<div class="posts-container">
+  <div class="posts-stats">
+    <p class="posts-count">共 <span id="posts-total"><%= posts.length %></span> 篇文章</p>
+  </div>
+  
+  <div class="posts-grid" id="posts-grid">
+    <% posts.forEach(function(post, index) { %>
+    <article class="post-card" data-category="<%= post.category || '' %>" data-date="<%= new Date(post.date).getTime() %>" data-title="<%= post.title.toLowerCase() %>">
+      <div class="post-meta">
+        <time class="post-date" datetime="<%= new Date(post.date).toISOString() %>">
+          <%= new Date(post.date).toLocaleDateString('zh-CN') %>
+        </time>
+        <% if (post.category) { %>
+        <span class="post-category"><%= post.category %></span>
+        <% } %>
+      </div>
+      
+      <h2 class="post-title">
+        <a href="<%= post.url %>"><%= post.title %></a>
+      </h2>
+      
+      <% if (post.excerpt) { %>
+      <p class="post-excerpt"><%= post.excerpt %></p>
+      <% } %>
+      
+      <% if (post.tags && post.tags.length > 0) { %>
+      <div class="post-tags">
+        <% post.tags.forEach(function(tag) { %>
+        <a href="/tags/<%= tag.toLowerCase().replace(/\s+/g, '-') %>/" class="tag">#<%= tag %></a>
+        <% }); %>
+      </div>
+      <% } %>
+      
+      <div class="post-actions">
+        <a href="<%= post.url %>" class="read-more">阅读更多</a>
+        <% if (post.readingTime) { %>
+        <span class="reading-time"><%= post.readingTime %> 分钟阅读</span>
+        <% } %>
+      </div>
+    </article>
+    <% }); %>
+  </div>
+  
+  <!-- Pagination -->
+  <div class="pagination" id="pagination">
+    <!-- 分页将通过 JavaScript 动态生成 -->
+  </div>
+</div>
+<% } else { %>
+<div class="empty-state">
+  <div class="empty-icon">📝</div>
+  <h3>暂无文章</h3>
+  <p>还没有发布任何文章，请稍后再来查看。</p>
+</div>
+<% } %>
+
+<!-- Posts Archive by Year -->
+<% if (posts && posts.length > 0) { %>
+<section class="posts-archive">
+  <h2 class="section-title">文章归档</h2>
+  
+  <div class="archive-timeline">
+    <% 
+    const postsByYear = {};
+    posts.forEach(function(post) {
+      const year = new Date(post.date).getFullYear();
+      if (!postsByYear[year]) {
+        postsByYear[year] = [];
+      }
+      postsByYear[year].push(post);
+    });
+    
+    Object.keys(postsByYear).sort((a, b) => b - a).forEach(function(year) {
+    %>
+    <div class="archive-year">
+      <h3 class="year-title"><%= year %> 年 (<%= postsByYear[year].length %> 篇)</h3>
+      <div class="year-posts">
+        <% postsByYear[year].forEach(function(post) { %>
+        <div class="archive-post">
+          <time class="archive-date"><%= new Date(post.date).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' }) %></time>
+          <a href="<%= post.url %>" class="archive-title"><%= post.title %></a>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+    <% }); %>
+  </div>
+</section>
+<% } %>
+
+<script>
+// 文章过滤和搜索功能
+(function() {
+  const searchInput = document.getElementById('search-input');
+  const categoryFilter = document.getElementById('category-filter');
+  const sortFilter = document.getElementById('sort-filter');
+  const postsGrid = document.getElementById('posts-grid');
+  const postsTotal = document.getElementById('posts-total');
+  
+  let allPosts = Array.from(document.querySelectorAll('.post-card'));
+  let filteredPosts = [...allPosts];
+  
+  // 初始化分类选项
+  function initCategoryFilter() {
+    const categories = new Set();
+    allPosts.forEach(post => {
+      const category = post.dataset.category;
+      if (category) categories.add(category);
+    });
+    
+    categories.forEach(category => {
+      const option = document.createElement('option');
+      option.value = category;
+      option.textContent = category;
+      categoryFilter.appendChild(option);
+    });
+  }
+  
+  // 过滤文章
+  function filterPosts() {
+    const searchTerm = searchInput.value.toLowerCase();
+    const selectedCategory = categoryFilter.value;
+    
+    filteredPosts = allPosts.filter(post => {
+      const title = post.dataset.title;
+      const category = post.dataset.category;
+      
+      const matchesSearch = !searchTerm || title.includes(searchTerm);
+      const matchesCategory = !selectedCategory || category === selectedCategory;
+      
+      return matchesSearch && matchesCategory;
+    });
+    
+    sortPosts();
+    displayPosts();
+  }
+  
+  // 排序文章
+  function sortPosts() {
+    const sortBy = sortFilter.value;
+    
+    filteredPosts.sort((a, b) => {
+      switch (sortBy) {
+        case 'date-desc':
+          return parseInt(b.dataset.date) - parseInt(a.dataset.date);
+        case 'date-asc':
+          return parseInt(a.dataset.date) - parseInt(b.dataset.date);
+        case 'title':
+          return a.dataset.title.localeCompare(b.dataset.title);
+        default:
+          return 0;
+      }
+    });
+  }
+  
+  // 显示文章
+  function displayPosts() {
+    // 隐藏所有文章
+    allPosts.forEach(post => {
+      post.style.display = 'none';
+    });
+    
+    // 显示过滤后的文章
+    filteredPosts.forEach(post => {
+      post.style.display = 'block';
+    });
+    
+    // 更新文章数量
+    postsTotal.textContent = filteredPosts.length;
+  }
+  
+  // 事件监听
+  searchInput.addEventListener('input', filterPosts);
+  categoryFilter.addEventListener('change', filterPosts);
+  sortFilter.addEventListener('change', filterPosts);
+  
+  // 初始化
+  initCategoryFilter();
+})();
+</script>

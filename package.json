@@ -1,52 +1,20 @@
 {
-  "name": "static-blog-generator",
+  "name": "simple-static-generator",
   "version": "1.0.0",
-  "description": "一个简约的静态博客生成器，类似 Hexo 的设计理念",
-  "main": "lib/builder.js",
+  "description": "一个简洁的静态网站生成器",
+  "main": "build.js",
   "scripts": {
-    "dev": "node bin/cli.js dev",
-    "build": "node bin/cli.js build",
-    "build:quick": "node bin/cli.js build --quick",
-    "build:watch": "node bin/cli.js build --watch",
-    "preview": "node bin/cli.js preview",
-    "init": "node bin/cli.js init",
-    "clean": "node bin/cli.js clean"
+    "build": "node build.js",
+    "clean": "rm -rf dist"
   },
-  "keywords": [
-    "static-site-generator",
-    "blog",
-    "markdown",
-    "ejs",
-    "ssg"
-  ],
-  "author": "Static Blog Generator",
+  "keywords": ["static", "generator", "blog", "website"],
+  "author": "",
   "license": "MIT",
   "dependencies": {
-    "gray-matter": "^4.0.3",
     "marked": "^9.1.6",
-    "ejs": "^3.1.9",
-    "fs-extra": "^11.2.0",
-    "chokidar": "^3.5.3",
-    "express": "^4.18.2",
-    "moment": "^2.29.4",
-    "highlight.js": "^11.9.0",
-    "lunr": "^2.3.9",
-    "cheerio": "^1.0.0-rc.12",
-    "commander": "^11.1.0",
-    "rss": "^1.2.2",
-    "sitemap": "^7.1.1",
-    "livereload": "^0.9.3",
-    "inquirer": "^8.2.6",
-    "glob": "^8.1.0",
-    "socket.io": "^4.7.5"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.2"
-  },
-  "engines": {
-    "node": ">=16.0.0"
-  },
-  "bin": {
-    "static-blog": "./bin/cli.js"
+    "fs-extra": "^11.1.1",
+    "gray-matter": "^4.0.3",
+    "handlebars": "^4.7.8",
+    "chalk": "^4.1.2"
   }
 }
